@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projects Dock</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        .project-card {
+            transition: all .2s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+    </style>
+
+</head>
+
+<body class="bg-slate-950 text-slate-100">
+
+    <!-- HEADER -->
+
+    <header class="border-b border-slate-800">
+
+        <div class="max-w-6xl mx-auto px-6">
+
+            <div class="h-16 flex items-center justify-between">
+
+                <a href="#" class="font-semibold text-lg">
+                    Projects Dock
+                </a>
+
+                <a class="text-sm text-slate-500" href="#footer">
+                    By Manideep Talampally
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- HERO -->
+
+    <section class="max-w-6xl mx-auto px-6 py-20">
+
+        <div class="max-w-3xl">
+
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
+
+                Things I Built
+
+            </h1>
+
+            <p class="mt-6 text-lg text-slate-400 leading-relaxed">
+
+                A home for the tools, websites, and experiments I've created.
+                Most started as personal ideas, then became projects worth sharing.
+
+            </p>
+
+            <div class="mt-8">
+
+                <a href="#projects"
+                    class="inline-flex items-center bg-indigo-600 hover:bg-indigo-500 transition px-5 py-3 rounded-xl font-medium">
+                    Browse Projects
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SEARCH -->
+
+    <section id="projects">
+
+        <div class="max-w-6xl mx-auto px-6">
+
+            <div class="max-w-md">
+
+                <input id="searchInput" type="text" placeholder="Search projects..."
+                    class="search-input w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 focus:border-indigo-500">
+
+            </div>
+
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer id="footer" class="border-t border-slate-800 mt-20">
+
+        <div class="max-w-6xl mx-auto px-6 py-10">
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+
+                <div>
+
+                    <h3 class="font-medium">
+                        Manideep Talampally
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        Building useful websites for free usage.
+                    </p>
+
+                </div>
+
+                <div class="flex gap-6 text-sm">
+
+                    <a href="https://github.com/235mani" target="_blank" rel="noopener noreferrer"
+                        class="text-slate-400 hover:text-white">
+                        GitHub
+                    </a>
+
+                    <a href="https://linkedin.com/in/manideep-talampally" target="_blank" rel="noopener noreferrer"
+                        class="text-slate-400 hover:text-white">
+                        LinkedIn
+                    </a>
+
+                    <a href="mailto:manideeptalampally@gmail.com" class="text-slate-400 hover:text-white">
+                        Email
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <script>
+        const projects = [
+
+            {
+                title: "Splitwise (Expense Tracker)",
+                isActive: true,
+                description: "Track shared expenses and settle balances with friends and groups.",
+                tags: ["Finance", "Flask"],
+                url: "https://splitwise-dock.vercel.app/"
+            },
+
+            {
+                title: "Comming soon...",
+                isActive: true,
+                description: "More projects are on the way! Stay tuned for updates.",
+                tags: [],
+                url: ""
+            },
+
+            {
+                title: "JD Resume Generator",
+                isActive: false,
+                description: "Generate tailored resumes based on specific job descriptions.",
+                tags: ["Resume", "Career"],
+                url: "#"
+            },
+
+            {
+                title: "PDF Merger",
+                isActive: false,
+                description: "Combine multiple PDF files into a single document.",
+                tags: ["PDF"],
+                url: "#"
+            },
+
+            {
+                title: "PDF Compressor",
+                isActive: false,
+                description: "Reduce PDF file sizes quickly and easily.",
+                tags: ["PDF"],
+                url: "#"
+            }
+
+        ];
+
+        const projectsGrid = document.getElementById("projectsGrid");
+        const searchInput = document.getElementById("searchInput");
+
+        function renderProjects(items) {
+
+            projectsGrid.innerHTML = "";
+
+            if (!items.length) {
+
+                projectsGrid.innerHTML = `
+        <div class="col-span-full text-center py-12 text-slate-500">
+            No projects found.
+        </div>
+    `;
+
+                return;
+            }
+
+            items.forEach(project => {
+                if (!project.isActive) return;
+                const card = document.createElement("a");
+
+                if (project.url) {
+                    card.href = project.url;
+                    card.target = "_blank";
+                    card.rel = "noopener noreferrer";
+                }
+                card.target = "_blank";
+                card.rel = "noopener noreferrer";
+
+                card.className = `
+        project-card
+        block
+        bg-slate-900
+        border
+        border-slate-800
+        rounded-2xl
+        p-6
+        hover:border-indigo-500
+    `;
+
+                card.innerHTML = `
+
+        <h3 class="text-lg font-semibold">
+            ${project.title}
+        </h3>
+
+        <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+            ${project.description}
+        </p>
+
+        <div class="flex flex-wrap gap-2 mt-5">
+
+            ${project.tags.map(tag => `
+                <span class="text-xs px-2 py-1 rounded-md bg-slate-800 text-slate-300">
+                    ${tag}
+                </span>
+            `).join("")}
+
+        </div>
+
+        ${project.url ? `
+            <div class="mt-6 text-indigo-400 text-sm font-medium">
+                Open Project →
+            </div>
+        ` : ""}
+
+    `;
+
+                projectsGrid.appendChild(card);
+
+            });
+        }
+
+        renderProjects(projects);
+
+        searchInput.addEventListener("input", (e) => {
+
+            const term = e.target.value.toLowerCase();
+
+            const filtered = projects.filter(project =>
+
+                project.title.toLowerCase().includes(term) ||
+
+                project.description.toLowerCase().includes(term) ||
+
+                project.tags.some(tag =>
+                    tag.toLowerCase().includes(term)
+                )
+
+            );
+
+            renderProjects(filtered);
+
+        });
+
+    </script>
+
+</body>
+
+</html>
