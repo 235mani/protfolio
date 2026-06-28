@@ -1,301 +1,446 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Projects Dock — a collection of useful, free tools and experiments built by Manideep Talampally.">
+    <meta name="theme-color" content="#070b17">
+    <title>Projects Dock — Built by Manideep</title>
 
-    <title>Projects Dock</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            color-scheme: dark;
+            --bg: #070b17;
+            --surface: rgba(17, 25, 48, .58);
+            --surface-strong: rgba(20, 29, 55, .82);
+            --border: rgba(255, 255, 255, .11);
+            --border-bright: rgba(153, 176, 255, .28);
+            --text: #f4f6ff;
+            --muted: #a8b0c7;
+            --accent: #8da2ff;
+            --accent-2: #b688ff;
+            --success: #6ee7b7;
+            --radius: 24px;
+            --shadow: 0 24px 80px rgba(0, 0, 0, .28);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+
         body {
-            font-family: Inter, system-ui, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 8% 5%, rgba(89, 109, 255, .16), transparent 30rem),
+                radial-gradient(circle at 92% 32%, rgba(171, 93, 255, .12), transparent 32rem),
+                var(--bg);
+            color: var(--text);
+            font-family: "DM Sans", system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .project-card {
-            transition: all .2s ease;
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .28;
+            background-image: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: linear-gradient(to bottom, black, transparent 80%);
         }
 
-        .project-card:hover {
-            transform: translateY(-4px);
+        a { color: inherit; text-decoration: none; }
+        button, input { font: inherit; }
+
+        .shell { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+        .glass {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.05), var(--shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        .search-input:focus {
+        .site-header { position: sticky; top: 16px; z-index: 20; padding-top: 16px; }
+        .nav {
+            min-height: 64px;
+            padding: 10px 12px 10px 18px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 700; }
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: linear-gradient(145deg, rgba(142,162,255,.28), rgba(182,136,255,.12));
+            border: 1px solid rgba(179,190,255,.3);
+            box-shadow: 0 8px 24px rgba(113, 99, 255, .2);
+        }
+        .brand-mark svg { width: 18px; height: 18px; }
+
+        .nav-links { display: flex; align-items: center; gap: 4px; }
+        .nav-link { color: var(--muted); font-size: 14px; padding: 10px 14px; border-radius: 12px; transition: .2s ease; }
+        .nav-link:hover, .nav-link:focus-visible { color: var(--text); background: rgba(255,255,255,.06); outline: none; }
+        .nav-cta { color: var(--text); border: 1px solid var(--border); background: rgba(255,255,255,.07); }
+
+        .hero { position: relative; padding: 118px 0 84px; text-align: center; }
+        .orb { position: absolute; pointer-events: none; border-radius: 999px; filter: blur(2px); }
+        .orb-one { width: 330px; height: 330px; left: -240px; top: 50px; background: rgba(79, 109, 255, .14); filter: blur(60px); }
+        .orb-two { width: 260px; height: 260px; right: -170px; top: 160px; background: rgba(177, 86, 255, .12); filter: blur(60px); }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 13px;
+            border-radius: 999px;
+            color: #cbd3e9;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .02em;
+        }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 5px rgba(110,231,183,.1), 0 0 14px rgba(110,231,183,.7); }
+
+        h1, h2, h3, p { margin-top: 0; }
+        h1 {
+            max-width: 900px;
+            margin: 27px auto 22px;
+            font-family: "Manrope", sans-serif;
+            font-size: clamp(3rem, 7.7vw, 6.4rem);
+            line-height: .98;
+            letter-spacing: -.065em;
+        }
+        .gradient-text { color: transparent; background: linear-gradient(100deg, #fff 5%, #aebcff 48%, #d2a9ff 95%); background-clip: text; -webkit-background-clip: text; }
+        .hero-copy { max-width: 620px; margin: 0 auto; color: var(--muted); font-size: clamp(1rem, 2vw, 1.18rem); line-height: 1.7; }
+
+        .hero-actions { display: flex; justify-content: center; gap: 12px; margin-top: 34px; }
+        .button {
+            min-height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 0 20px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+        .button:hover { transform: translateY(-2px); }
+        .button-primary { color: #0a0e1c; background: linear-gradient(135deg, #dfe5ff, #aebcff); box-shadow: 0 12px 35px rgba(117,137,255,.25); }
+        .button-secondary { background: rgba(255,255,255,.055); border: 1px solid var(--border); color: #dce1f2; }
+        .button svg { width: 17px; height: 17px; }
+
+        .projects-section { padding: 34px 0 72px; scroll-margin-top: 100px; }
+        .section-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 28px; }
+        .section-kicker { margin-bottom: 10px; color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+        h2 { margin-bottom: 0; font: 700 clamp(2rem, 4vw, 3.1rem)/1.08 "Manrope", sans-serif; letter-spacing: -.045em; }
+
+        .search-wrap { position: relative; flex: 0 1 330px; }
+        .search-icon { position: absolute; left: 16px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: #7f89a5; pointer-events: none; }
+        .search-input {
+            width: 100%;
+            height: 50px;
+            padding: 0 44px;
+            color: var(--text);
+            background: rgba(15,22,42,.65);
+            border: 1px solid var(--border);
+            border-radius: 15px;
             outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .search-input::placeholder { color: #747e99; }
+        .search-input:focus { border-color: rgba(141,162,255,.58); box-shadow: 0 0 0 4px rgba(141,162,255,.09); }
+        .clear-search { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); display: none; width: 32px; height: 32px; color: var(--muted); border: 0; border-radius: 9px; background: transparent; cursor: pointer; }
+        .clear-search:hover { color: var(--text); background: rgba(255,255,255,.07); }
+
+        .projects-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+        .project-card {
+            position: relative;
+            min-height: 300px;
+            overflow: hidden;
+            border-radius: var(--radius);
+            padding: 27px;
+            display: flex;
+            flex-direction: column;
+            isolation: isolate;
+            transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .3s;
+        }
+        .project-card::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 230px;
+            height: 230px;
+            right: -90px;
+            top: -90px;
+            border-radius: 50%;
+            background: var(--card-glow, rgba(119, 140, 255, .15));
+            filter: blur(20px);
+            transition: transform .35s ease, opacity .35s ease;
+        }
+        .project-card[href]:hover { transform: translateY(-6px); border-color: var(--border-bright); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 30px 80px rgba(0,0,0,.38); }
+        .project-card[href]:hover::before { transform: scale(1.25); opacity: .9; }
+        .project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+        .project-card.featured { grid-column: span 2; min-height: 330px; }
+
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .project-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; color: #cad3ff; background: rgba(151,168,255,.12); border: 1px solid rgba(164,179,255,.2); }
+        .project-icon svg { width: 23px; height: 23px; }
+        .open-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: #9aa6c3; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.035); transition: .2s; }
+        .open-icon svg { width: 17px; height: 17px; }
+        .project-card[href]:hover .open-icon { color: #fff; background: rgba(255,255,255,.1); transform: translate(2px,-2px); }
+        .project-title { margin: auto 0 9px; font: 700 clamp(1.25rem, 2.5vw, 1.7rem)/1.2 "Manrope", sans-serif; letter-spacing: -.025em; }
+        .featured .project-title { font-size: clamp(1.55rem, 3vw, 2.1rem); }
+        .project-description { max-width: 570px; margin-bottom: 20px; color: var(--muted); font-size: 15px; line-height: 1.62; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 7px 10px; border-radius: 9px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.065); color: #bec6dc; font-size: 11px; font-weight: 600; letter-spacing: .02em; }
+        .coming-soon { cursor: default; --card-glow: rgba(187, 117, 255, .12); }
+        .coming-label { color: #cdb5f7; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+        .empty-state { grid-column: 1/-1; padding: 60px 20px; border-radius: var(--radius); text-align: center; color: var(--muted); }
+
+        footer { padding: 46px 0 34px; }
+        .footer-card { border-radius: var(--radius); padding: 26px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .footer-name { margin-bottom: 4px; font-weight: 700; }
+        .footer-copy { margin: 0; color: var(--muted); font-size: 14px; }
+        .socials { display: flex; flex-wrap: wrap; gap: 8px; }
+        .social-link { padding: 9px 12px; border-radius: 10px; color: var(--muted); font-size: 13px; transition: .2s; }
+        .social-link:hover, .social-link:focus-visible { color: var(--text); background: rgba(255,255,255,.07); outline: none; }
+        .copyright { margin: 20px 0 0; text-align: center; color: #69738c; font-size: 12px; }
+
+        @media (max-width: 720px) {
+            .shell { width: min(100% - 28px, 1120px); }
+            .site-header { top: 9px; padding-top: 9px; }
+            .nav { min-height: 58px; }
+            .nav-link:not(.nav-cta) { display: none; }
+            .nav-cta { padding: 9px 11px; }
+            .hero { padding: 52px 0 42px; }
+            .eyebrow { gap: 8px; padding: 7px 11px; font-size: 12px; }
+            h1 {
+                margin: 20px auto 14px;
+                font-size: clamp(2.55rem, 12vw, 3rem);
+                line-height: 1.02;
+                letter-spacing: -.055em;
+            }
+            .hero-copy { max-width: 350px; font-size: .94rem; line-height: 1.55; }
+            .hero-copy br { display: none; }
+            .hero-actions {
+                align-items: stretch;
+                gap: 8px;
+                max-width: 350px;
+                margin: 24px auto 0;
+            }
+            .hero-actions .button { flex: 1; min-height: 44px; padding: 0 12px; font-size: 13px; border-radius: 13px; }
+            .projects-section { padding-top: 18px; }
+            .section-head { align-items: stretch; flex-direction: column; gap: 22px; }
+            .search-wrap { flex-basis: auto; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-column: auto; }
+            .project-card { min-height: 280px; padding: 23px; }
+            .footer-card { align-items: flex-start; flex-direction: column; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+        }
+
+        @supports not (backdrop-filter: blur(1px)) {
+            .glass { background: var(--surface-strong); }
         }
     </style>
-
 </head>
 
-<body class="bg-slate-950 text-slate-100">
-
-    <!-- HEADER -->
-
-    <header class="border-b border-slate-800">
-
-        <div class="max-w-6xl mx-auto px-6">
-
-            <div class="h-16 flex items-center justify-between">
-
-                <a href="#" class="font-semibold text-lg">
-                    Projects Dock
-                </a>
-
-                <a class="text-sm text-slate-500" href="#footer" title="About me">
-                    By Manideep Talampally
-                </a>
-
+<body>
+    <header class="site-header">
+        <nav class="shell nav glass" aria-label="Main navigation">
+            <a class="brand" href="#top" aria-label="Projects Dock home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5h5l1.5 2H19v9H5z"/><path d="M8 13h8M12 10v6"/></svg>
+                </span>
+                <span>Projects Dock</span>
+            </a>
+            <div class="nav-links">
+                <a class="nav-link" href="#projects">Projects</a>
+                <!-- <a class="nav-link" href="#about">About</a> -->
+                <a class="nav-link nav-cta" href="#about">About Me</a>
             </div>
-
-        </div>
-
+        </nav>
     </header>
 
-    <!-- HERO -->
-
-    <section class="max-w-6xl mx-auto px-6 py-20">
-
-        <div class="max-w-3xl">
-
-            <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
-
-                Things i Built | Free to use
-
-            </h1>
-
-            <p class="mt-6 text-lg text-slate-400 leading-relaxed">
-
-                A home for the tools, websites, and experiments I've created.
-                Most started as personal ideas, then became projects worth sharing.
-
-            </p>
-
-            <div class="mt-8">
-
-                <a href="#projects"
-                    class="inline-flex items-center bg-indigo-600 hover:bg-indigo-500 transition px-5 py-3 rounded-xl font-medium">
-                    Browse Projects
+    <main id="top">
+        <section class="hero shell">
+            <span class="orb orb-one" aria-hidden="true"></span>
+            <span class="orb orb-two" aria-hidden="true"></span>
+            <div class="eyebrow glass"><span class="status-dot"></span> Building useful things for the web</div>
+            <h1>Small ideas.<br><span class="gradient-text">Useful products.</span></h1>
+            <p class="hero-copy">A growing collection of tools, websites, and experiments—<br>thoughtfully built and free for everyone to use.</p>
+            <div class="hero-actions">
+                <a class="button button-primary" href="#projects">
+                    Explore projects
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                 </a>
-
+                <a class="button button-secondary" href="https://github.com/235mani" target="_blank" rel="noopener noreferrer">
+                    View GitHub
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                </a>
             </div>
+        </section>
 
-        </div>
-
-    </section>
-
-    <!-- SEARCH -->
-
-    <section id="projects">
-
-        <div class="max-w-6xl mx-auto px-6">
-
-            <div class="max-w-md">
-
-                <input id="searchInput" type="text" placeholder="Search projects..."
-                    class="search-input w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 focus:border-indigo-500">
-
-            </div>
-
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12">
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- FOOTER -->
-
-    <footer id="footer" class="border-t border-slate-800 mt-20">
-
-        <div class="max-w-6xl mx-auto px-6 py-10">
-
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-
+        <section class="projects-section shell" id="projects">
+            <div class="section-head">
                 <div>
-
-                    <h3 class="font-medium">
-                        Manideep Talampally
-                    </h3>
-
-                    <p class="text-sm text-slate-500 mt-1">
-                        Building useful websites for free usage.
-                    </p>
-
+                    <p class="section-kicker">Selected work</p>
+                    <h2>Things I've built</h2>
                 </div>
-
-                <div class="flex gap-6 text-sm">
-
-                    <a href="https://github.com/235mani" target="_blank" rel="noopener noreferrer"
-                        class="text-slate-400 hover:text-white">
-                        GitHub
-                    </a>
-
-                    <a href="https://linkedin.com/in/manideep-talampally" target="_blank" rel="noopener noreferrer"
-                        class="text-slate-400 hover:text-white">
-                        LinkedIn
-                    </a>
-
-                    <a href="mailto:manideeptalampally@gmail.com" class="text-slate-400 hover:text-white">
-                        Email
-                    </a>
-
+                <div class="search-wrap">
+                    <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                    <label for="searchInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Search projects</label>
+                    <input id="searchInput" class="search-input" type="search" placeholder="Search projects..." autocomplete="off">
+                    <button id="clearSearch" class="clear-search" type="button" aria-label="Clear search">×</button>
                 </div>
-
             </div>
+            <div id="projectsGrid" class="projects-grid" aria-live="polite"></div>
+        </section>
+    </main>
 
+    <footer id="about">
+        <div class="shell">
+            <div class="footer-card glass">
+                <div>
+                    <p class="footer-name">Manideep Talampally</p>
+                    <p class="footer-copy">Building useful websites, one idea at a time.</p>
+                </div>
+                <div class="socials" aria-label="Social links">
+                    <a class="social-link" href="https://github.com/235mani" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                    <a class="social-link" href="https://linkedin.com/in/manideep-talampally" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+                    <a class="social-link" href="mailto:manideeptalampally@gmail.com">Email ↗</a>
+                </div>
+            </div>
+            <p class="copyright">© <span id="year"></span> Projects Dock. Crafted with curiosity.</p>
         </div>
-
     </footer>
 
     <script>
         const projects = [
-
             {
-                title: "Splitwise (Expense Tracker)",
-                isActive: true,
-                description: "Track shared expenses and settle balances with friends and groups.",
-                tags: ["Finance Tracker", "trips", "Expense Tracker", "sharing"],
-                url: "https://splitwise-dock.vercel.app/"
+                title: "Splitwise — Expense Tracker",
+                description: "Track shared expenses, understand balances, and settle up easily with friends and groups.",
+                tags: ["Finance", "Trips", "Sharing"],
+                url: "https://splitwise-dock.vercel.app/",
+                icon: "wallet",
+                featured: true,
+                glow: "rgba(92, 122, 255, .2)"
             },
-
             {
                 title: "Resume Builder",
-                isActive: true,
-                description: "Create professional resumes quickly and easily with customizable templates.",
-                tags: ["Resume", "Career"],
-                url: "https://resumebuilder-dock.vercel.app/"
+                description: "Create a polished, professional resume quickly with flexible, customizable templates.",
+                tags: ["Career", "Productivity"],
+                url: "https://resumebuilder-dock.vercel.app/",
+                icon: "document",
+                glow: "rgba(97, 189, 255, .16)"
             },
-
             {
-                title: "Comming soon...",
-                isActive: true,
-                description: "More projects are on the way! Stay tuned for updates.",
+                title: "Something new is brewing",
+                description: "More useful projects are on the way. Check back soon to see what launches next.",
                 tags: [],
-                url: ""
-            },
-
-
-            {
-                title: "PDF Merger",
-                isActive: false,
-                description: "Combine multiple PDF files into a single document.",
-                tags: ["PDF"],
-                url: "#"
-            },
-
-            {
-                title: "PDF Compressor",
-                isActive: false,
-                description: "Reduce PDF file sizes quickly and easily.",
-                tags: ["PDF"],
-                url: "#"
+                url: "",
+                icon: "sparkles",
+                glow: "rgba(187, 117, 255, .15)"
             }
-
         ];
 
+        const icons = {
+            wallet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v14H6.5A2.5 2.5 0 0 1 4 16.5z"/><path d="M4 8h15M15 12h6v4h-6a2 2 0 0 1 0-4Z"/></svg>',
+            document: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg>',
+            sparkles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 1.3 4.2L17.5 9l-4.2 1.8L12 15l-1.3-4.2L6.5 9l4.2-1.8zM18 15l.7 2.3L21 18l-2.3.7L18 21l-.7-2.3L15 18l2.3-.7z"/></svg>'
+        };
+
+        const externalIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>';
         const projectsGrid = document.getElementById("projectsGrid");
         const searchInput = document.getElementById("searchInput");
+        const clearSearch = document.getElementById("clearSearch");
 
         function renderProjects(items) {
-
-            projectsGrid.innerHTML = "";
+            projectsGrid.replaceChildren();
 
             if (!items.length) {
-
-                projectsGrid.innerHTML = `
-        <div class="col-span-full text-center py-12 text-slate-500">
-            No projects found.
-        </div>
-    `;
-
+                const empty = document.createElement("div");
+                empty.className = "empty-state glass";
+                empty.innerHTML = "<strong>No matching projects</strong><br><span>Try a different title, topic, or tag.</span>";
+                projectsGrid.appendChild(empty);
                 return;
             }
 
-            items.forEach(project => {
-                if (!project.isActive) return;
-                const card = document.createElement("a");
+            items.forEach((project) => {
+                const card = document.createElement(project.url ? "a" : "article");
+                card.className = `project-card glass${project.featured ? " featured" : ""}${project.url ? "" : " coming-soon"}`;
+                card.style.setProperty("--card-glow", project.glow);
 
                 if (project.url) {
                     card.href = project.url;
                     card.target = "_blank";
                     card.rel = "noopener noreferrer";
+                    card.setAttribute("aria-label", `${project.title} — open project in a new tab`);
                 }
-                card.target = "_blank";
-                card.rel = "noopener noreferrer";
 
-                card.className = `
-        project-card
-        block
-        bg-slate-900
-        border
-        border-slate-800
-        rounded-2xl
-        p-6
-        hover:border-indigo-500
-    `;
+                const top = document.createElement("div");
+                top.className = "card-top";
+                top.innerHTML = `<span class="project-icon" aria-hidden="true">${icons[project.icon]}</span>${project.url ? `<span class="open-icon">${externalIcon}</span>` : '<span class="coming-label">Coming soon</span>'}`;
 
-                card.innerHTML = `
+                const title = document.createElement("h3");
+                title.className = "project-title";
+                title.textContent = project.title;
 
-        <h3 class="text-lg font-semibold">
-            ${project.title}
-        </h3>
+                const description = document.createElement("p");
+                description.className = "project-description";
+                description.textContent = project.description;
 
-        <p class="mt-3 text-sm text-slate-400 leading-relaxed">
-            ${project.description}
-        </p>
+                const tags = document.createElement("div");
+                tags.className = "tag-list";
+                project.tags.forEach((tag) => {
+                    const pill = document.createElement("span");
+                    pill.className = "tag";
+                    pill.textContent = tag;
+                    tags.appendChild(pill);
+                });
 
-        <div class="flex flex-wrap gap-2 mt-5">
-
-            ${project.tags.map(tag => `
-                <span class="text-xs px-2 py-1 rounded-md bg-slate-800 text-slate-300">
-                    ${tag}
-                </span>
-            `).join("")}
-
-        </div>
-
-        ${project.url ? `
-            <div class="mt-6 text-indigo-400 text-sm font-medium">
-                Open Project →
-            </div>
-        ` : ""}
-
-    `;
-
+                card.append(top, title, description, tags);
                 projectsGrid.appendChild(card);
-
             });
         }
 
-        renderProjects(projects);
-
-        searchInput.addEventListener("input", (e) => {
-
-            const term = e.target.value.toLowerCase();
-
-            const filtered = projects.filter(project =>
-
-                project.title.toLowerCase().includes(term) ||
-
-                project.description.toLowerCase().includes(term) ||
-
-                project.tags.some(tag =>
-                    tag.toLowerCase().includes(term)
-                )
-
+        function filterProjects() {
+            const term = searchInput.value.trim().toLowerCase();
+            const filtered = projects.filter((project) =>
+                [project.title, project.description, ...project.tags].some((value) => value.toLowerCase().includes(term))
             );
-
+            clearSearch.style.display = term ? "grid" : "none";
             renderProjects(filtered);
+        }
 
+        searchInput.addEventListener("input", filterProjects);
+        clearSearch.addEventListener("click", () => {
+            searchInput.value = "";
+            searchInput.focus();
+            filterProjects();
         });
 
+        document.getElementById("year").textContent = new Date().getFullYear();
+        renderProjects(projects);
     </script>
-
 </body>
-
 </html>
