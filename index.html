@@ -96,7 +96,7 @@
         .nav-link:hover, .nav-link:focus-visible { color: var(--text); background: rgba(255,255,255,.06); outline: none; }
         .nav-cta { color: var(--text); border: 1px solid var(--border); background: rgba(255,255,255,.07); }
 
-        .hero { position: relative; padding: 118px 0 84px; text-align: center; }
+        .hero { position: relative; padding: 100px 0 84px; text-align: center; }
         .orb { position: absolute; pointer-events: none; border-radius: 999px; filter: blur(2px); }
         .orb-one { width: 330px; height: 330px; left: -240px; top: 50px; background: rgba(79, 109, 255, .14); filter: blur(60px); }
         .orb-two { width: 260px; height: 260px; right: -170px; top: 160px; background: rgba(177, 86, 255, .12); filter: blur(60px); }
@@ -275,7 +275,6 @@
             </a>
             <div class="nav-links">
                 <a class="nav-link" href="#projects">Projects</a>
-                <!-- <a class="nav-link" href="#about">About</a> -->
                 <a class="nav-link nav-cta" href="#about">About Me</a>
             </div>
         </nav>
@@ -330,7 +329,7 @@
                     <a class="social-link" href="mailto:manideeptalampally@gmail.com">Email ↗</a>
                 </div>
             </div>
-            <p class="copyright">© <span id="year"></span> Projects Dock. Crafted with curiosity.</p>
+            <!-- <p class="copyright">© <span id="year"></span> Projects Dock. Crafted with curiosity.</p> -->
         </div>
     </footer>
 
@@ -342,7 +341,6 @@
                 tags: ["Finance", "Trips", "Sharing"],
                 url: "https://splitwise-dock.vercel.app/",
                 icon: "wallet",
-                featured: true,
                 glow: "rgba(92, 122, 255, .2)"
             },
             {
@@ -354,10 +352,11 @@
                 glow: "rgba(97, 189, 255, .16)"
             },
             {
-                title: "Something new is brewing",
+                title: "Stay tuned...",
                 description: "More useful projects are on the way. Check back soon to see what launches next.",
                 tags: [],
                 url: "",
+                featured: true,
                 icon: "sparkles",
                 glow: "rgba(187, 117, 255, .15)"
             }
@@ -438,8 +437,6 @@
             searchInput.focus();
             filterProjects();
         });
-
-        document.getElementById("year").textContent = new Date().getFullYear();
         renderProjects(projects);
     </script>
 </body>
